@@ -10,13 +10,6 @@ function Get-Banner{
 /**     /**/********/**   //**/********/**      /**     /**/**                            
 //      // //////// //     // //////// //       //      // //                             
                                                                                           
-                                                                                          
-                                                                                          
-                                                                                          
-                                                                                          
-                                                                                          
-                                                                                          
-                                                                                          
                     ******** ********   ******  **     ** *******   ** ********** **    **
                    **////// /**/////   **////**/**    /**/**////** /**/////**/// //**  ** 
                   /**       /**       **    // /**    /**/**   /** /**    /**     //****  
@@ -28,9 +21,6 @@ function Get-Banner{
 
 "
 }
-
-
-
 
 function Get-SecSum{
     param (
@@ -139,12 +129,11 @@ function Get-Powershell {
  
  $fltrs = @{logname="microsoft-windows-powershell/operatinoal";ID=4103}
  if ($strt -ne $null) {
-    $fltrs.StartTime = $strt
-    }
-
-    if ($nd -ne $null) {
-        $fltrs.EndTime = $nd
-    }
+ $fltrs.StartTime = $strt
+ }
+ if ($nd -ne $null) {
+ $fltrs.EndTime = $nd
+ }
  Get-Banner
  Get-WinEvent -FilterHashtable $fltrs `
   | Format-List *
@@ -156,11 +145,9 @@ function Get-Users-logins{
         $nd
     )
     $filters = @{LogName = "Security";ID=4624}
-    
     if ($strt -ne $null) {
         $filters.StartTime = $strt
     }
-
     if ($nd -ne $null) {
         $filters.EndTime = $nd
     }
@@ -177,4 +164,3 @@ function Get-Users-logins{
               @{Label ="LogonGUID"; Expression = {$_.properties[12].value}},`
                @{Label ="SRC IP"; Expression = {$_.properties[18].value}}
 }
-
