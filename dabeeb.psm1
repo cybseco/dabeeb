@@ -164,3 +164,48 @@ function Get-Users-logins{
               @{Label ="LogonGUID"; Expression = {$_.properties[12].value}},`
                @{Label ="SRC IP"; Expression = {$_.properties[18].value}}
 }
+
+function Get-failed-logins{
+    param (
+        $strt,
+        $nd
+    )
+    $filters = @{LogName = "Security";ID=4625}
+    if ($strt -ne $null) {
+        $filters.StartTime = $strt
+    }
+    if ($nd -ne $null) {
+        $filters.EndTime = $nd
+    }
+    Get-Banner
+    Get-WinEvent -FilterHashtable $filters `
+    | Format-List `
+       TimeCreated ,`
+         @{Label = "Logon Type"; Expression = {$_.properties[10].value}},`
+          @{Label = "Status"; Expression = {'{0:X8}' -f $_.properties[7].value}},`
+           @{Label = "Substatus"; Expression = {'{0:X8}' -f $_.properties[9].value}},`
+            @{Label = "Target User Name"; Expression = {$_.properties[5].value}},`
+             @{Label = "Workstation Name"; Expression = {$_.properties[13].value}},`
+              @{Label = "IP Address"; Expression = {$_.properties[19].value}}
+}
+<#
+@{Label = "Target User Name"; Expression = {$_.properties[5].value}}
+@{Label = "Workstation Name"; Expression = {$_.properties[13].value}}
+@{Label = "IP Address"; Expression = {$_.properties[19].value}}
+
+
+@{Label = "Status"; Expression = {'{0:X8}' -f $_.properties[7].value}}
+@{Label = "Substatus"; Expression = {'{0:X8}' -f $_.properties[9].value}}
+
+
+Get-SecurityEvent 4625 "5/6/2021 00:00:00" "5/7/2021 00:00:00"
+ | Format-List `
+ TimeCreated,`
+  @{Label = "Logon Type"; Expression = {$_.properties[10].value}},`
+   @{Label = "Status"; Expression = {'{0:X8}' -f $_.properties[7].value}},`
+    @{Label = "Substatus"; Expression = {'{0:X8}' -f $_.properties[9].value}},`
+     @{Label = "Target User Name"; Expression = {$_.properties[5].value}},`
+      @{Label = "Workstation Name"; Expression = {$_.properties[13].value}},`
+       @{Label = "IP Address"; Expression = {$_.properties[19].value}}
+
+#>
