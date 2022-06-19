@@ -152,5 +152,4 @@ function Get-Powershell {
   | Format-List *
  
 
-}
 
