@@ -1,4 +1,3 @@
-	
 function Get-Banner{
  echo "
  
@@ -28,8 +27,8 @@ function Get-Banner{
                   ////////  ////////   //////   ///////  //     // //     //        //    
 
 "
-
 }
+
 
 
 
@@ -132,7 +131,6 @@ function Get-Sysmon-NC{
 	      @{Label = "DST Port"; Expression = {$_.properties[16].value}}
 }
 
-
 function Get-Powershell {
  param (
   $strt,
@@ -152,4 +150,31 @@ function Get-Powershell {
   | Format-List *
  
 
+function Get-Users-logins{
+    param (
+        $strt,
+        $nd
+    )
+    $filters = @{LogName = "Security";ID=4624}
+    
+    if ($strt -ne $null) {
+        $filters.StartTime = $strt
+    }
+
+    if ($nd -ne $null) {
+        $filters.EndTime = $nd
+    }
+    Get-Banner
+    Get-WinEvent -FilterHashtable $filters `
+    | Format-List `
+       TimeCreated ,`
+        @{Label = "SubjectUserSid"; Expression = {$_.properties[0].value}},`
+         @{Label = "SubjectUserName"; Expression = {$_.properties[1].value}},`
+          @{Label = "SubjectDomainName"; Expression = {$_.properties[2].value}},`
+           @{Label = "LogonID"; Expression = {$_.properties[3].value}},`
+            @{Label = "LogonType"; Expression = {$_.properties[8].value}},`
+             @{Label ="WorkstationName"; Expression = {$_.properties[11].value}},`
+              @{Label ="LogonGUID"; Expression = {$_.properties[12].value}},`
+               @{Label ="SRC IP"; Expression = {$_.properties[18].value}}
+}
 
